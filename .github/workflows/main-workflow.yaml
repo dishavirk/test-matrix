@@ -1,42 +1,35 @@
 name: Main Workflow
 
-on:
-  push:
-    branches:
-        master
-  pull_request:
-  workflow_dispatch:
-    inputs:
-      fruits:
-        description: 'Specify fruits'
-        required: true
+on: [push, workflow_dispatch]
 
 jobs:
-  first-job:
+  job1:
     runs-on: ubuntu-latest
     steps:
-      - name: Print Message
-        run: echo "Hello from first job!"
+      - name: First Job Action
+        run: echo "Executing First Job"
 
-  second-job:
+  trigger_child_workflow:
     runs-on: ubuntu-latest
-    needs: first-job
-    strategy:
-      fail-fast: false
+    needs: job1
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2 
-
-      - name: Run Child Build Workflow
-        uses: ./.github/workflows/child-workflow.yaml
+      - name: Trigger Child Workflow
+        uses: actions/github-script@v4
         with:
-          fruits: ${{ github.event.inputs.fruits }}
-      - name: Continue Main Workflow
-        run: echo "Continuing with the main workflow"
-  third-job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print Message
-        run: echo "Hello from third job!"
+          script: |
+            github.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'child_workflow.yml',
+              ref: 'main',
+              inputs: {
+                'fruits': '["apple", "banana", "cherry", "durian"]'
+              }
+            })
 
-        
+  job3:
+    runs-on: ubuntu-latest
+    needs: trigger_child_workflow
+    steps:
+      - name: Third Job Action
+        run: echo "Executing Third Job"

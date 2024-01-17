@@ -1,22 +1,24 @@
 name: Child Workflow
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
+    inputs:
+      fruits:
+        description: 'JSON array of fruits'
+        required: true
 
 jobs:
-  build-fruit:
-    name: Build Fruit
+  process_fruit:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        fail-fast: false
-        fruit:
-          - 'apple'
-          - 'banana'
+        fruit: ${{ fromJson(github.event.inputs.fruits) }}
+      fail-fast: false
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2 
-      - name: Simulate Child Job
-        run: echo "Building for fruit ${{ matrix.fruit }}"
+      - name: Process Fruit
+        run: |
+          echo "Processing ${{ matrix.fruit }}"
+          # Simulating a failure condition for one of the fruits
+          if [ "${{ matrix.fruit }}" == "durian" ]; then
+            exit 1
+          fi
