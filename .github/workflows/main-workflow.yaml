@@ -24,6 +24,9 @@ jobs:
     strategy:
       fail-fast: false
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2 
+
       - name: Run Child Build Workflow
         uses: ./.github/workflows/child-workflow.yaml
         with:
@@ -35,3 +38,5 @@ jobs:
     steps:
       - name: Print Message
         run: echo "Hello from third job!"
+
+        
