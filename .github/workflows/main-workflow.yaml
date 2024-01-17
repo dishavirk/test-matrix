@@ -21,7 +21,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'child-workflow.yaml',
-              ref: 'main',
+              ref: 'master',
               inputs: {
                 'fruits': '["apple", "banana", "cherry", "durian"]'
               }
