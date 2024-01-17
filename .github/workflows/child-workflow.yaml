@@ -1,0 +1,20 @@
+name: Child Workflow
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-fruit:
+    name: Build Fruit
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        fail-fast: false
+        fruit:
+          - 'apple'
+          - 'banana'
+    steps:
+      - name: Simulate Build Job
+        run: echo "Building for fruit ${{ matrix.fruit }}"
