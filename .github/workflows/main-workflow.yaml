@@ -25,7 +25,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Run Child Build Workflow
-        uses: ./.github/workflows/child-workflow.yml
+        uses: ./.github/workflows/child-workflow.yaml
         with:
           fruits: ${{ github.event.inputs.fruits }}
       - name: Continue Main Workflow
