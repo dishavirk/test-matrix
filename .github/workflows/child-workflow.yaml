@@ -16,5 +16,7 @@ jobs:
           - 'apple'
           - 'banana'
     steps:
-      - name: Simulate Build Job
+      - name: Checkout Repository
+        uses: actions/checkout@v2 
+      - name: Simulate Child Job
         run: echo "Building for fruit ${{ matrix.fruit }}"
