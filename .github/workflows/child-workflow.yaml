@@ -15,17 +15,10 @@ jobs:
         fruit: ${{ fromJson(github.event.inputs.fruits) }}
       fail-fast: false
     steps:
-      - name: Check Fruit
-        run: echo "Checking ${{ matrix.fruit }}"
-
-      - name: Wash Fruit
-        if: matrix.fruit != 'durian'
-        run: echo "Washing ${{ matrix.fruit }}"
-
-      - name: Peel Fruit
-        if: matrix.fruit == 'banana' || matrix.fruit == 'durian'
-        run: echo "Peeling ${{ matrix.fruit }}"
-
-      - name: Slice Fruit
-        if: matrix.fruit == 'apple' || matrix.fruit == 'cherry'
-        run: echo "Slicing ${{ matrix.fruit }}"
+      - name: Process Fruit
+        run: |
+          echo "Processing ${{ matrix.fruit }}"
+          if [ "${{ matrix.fruit }}" = "durian" ]; then
+            echo "Processing of durian failed!"
+            exit 1
+          fi
